@@ -4,21 +4,26 @@
 void dummy_test_entrypoint() {
 }
 
-void printl( int colour, const unsigned char *string, int pos);
-int printnl( int colour, const unsigned char * string, int current_line);
-void print( int colour, const unsigned char *string);
-
-
+void printl( const unsigned char *string, int pos);
+int printnl( const unsigned char * string, int current_line);
+void print(const unsigned char *string);
+void clear_screen();
 
 void main() {
     int line = 0;
 
-    line = printnl(0x1f, "Kernel loaded sucsefully!", line);
-    line = printnl(0x1f, "Welcome to BenjiOS", line);
+    line = printnl("Kernel loaded sucsefully!", line);
+    clear_screen();
+    line = 0;
+    line = printnl("Welcome to BenjiOS", line);
+
+    
+
 }
 
-void print( int colour, const unsigned char *string) {
+void print( const unsigned char *string) {
 
+    int colour = 0x0a;
     unsigned char *vid = (unsigned char*) VIDEO_MEM;
     while(*string != 0)
     {
@@ -30,8 +35,9 @@ void print( int colour, const unsigned char *string) {
 
 }
 
-void printl( int colour, const unsigned char *string, int pos) {
+void printl( const unsigned char *string, int pos) {
 
+    int colour = 0x0a;
     unsigned char *vid = (unsigned char*) VIDEO_MEM;
     vid+=pos*160;
     while(*string != 0)
@@ -44,13 +50,18 @@ void printl( int colour, const unsigned char *string, int pos) {
 
 }
 
-int printnl( int colour, const unsigned char *string, int current_line) {
+int printnl(const unsigned char *string, int current_line) {
 
-    int new_line = current_line++;
-
-
-    printl(colour, string, new_line);
-
+    printl(string, current_line);
+    int new_line = ++current_line;
     return new_line;
 
+}
+
+void clear_screen(){
+    unsigned char *vid = (unsigned char*) VIDEO_MEM;
+    for (int i = 0; i<(30*160); i++) {
+        *(vid+1) = 0x00;
+        vid+=2;
+    }
 }
