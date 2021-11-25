@@ -33,7 +33,7 @@ $(kernel): kernel $(c_os) $(assembly_object_files) $(linker_script)
 
 kernel:
 	@mkdir -p build/C
-	@gcc -ffreestanding -c src/kernel/main.c -o build/C/main_c.o
+	@gcc -ffreestanding -mno-red-zone -c src/kernel/main.c -o build/C/main_c.o
 
 # compile assembly files
 build/arch/$(arch)/%.o: src/arch/$(arch)/%.asm
